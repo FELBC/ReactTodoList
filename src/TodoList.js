@@ -8,15 +8,23 @@ class TodoList extends Component{
     constructor(props){
         super(props);
         this.state = store.getState();
-        console.log(this.state);
+        this.handStoreChange = this.handStoreChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleBtnClick = this.handleBtnClick.bind(this);
+        store.subscribe(this.handStoreChange);
     }
 
     render(){
         return (
             <div style={{marginTop:'10px',marginLeft:'10px'}}>
                 <div>
-                    <Input value={this.state.inputValue} placeholder='todo info'  style={{width:'300px', marginRight:'10px'}} />
-                    <Button type="primary">提交</Button>
+                    <Input 
+                        value={this.state.inputValue} 
+                        placeholder='todo info'  
+                        style={{width:'300px', marginRight:'10px'}} 
+                        onChange={this.handleInputChange}    
+                    />
+                    <Button type="primary" onClick={this.handleBtnClick}>提交</Button>
                 </div>
                 <List 
                     style={{marginTop:'10px',width:'300px'}}
@@ -26,6 +34,25 @@ class TodoList extends Component{
                 />
             </div>
         )
+    }
+
+    handStoreChange(){
+        this.setState(store.getState());
+    }
+
+    handleInputChange(e){
+        const action = {
+            type:'change_input_value',
+            value:e.target.value
+        };
+        store.dispatch(action);
+    }
+
+    handleBtnClick(){
+        const action = {
+            type:'add_todo_item',
+        };
+        store.dispatch(action);
     }
 }
 
