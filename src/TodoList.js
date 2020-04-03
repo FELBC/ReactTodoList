@@ -8,10 +8,10 @@ class TodoList extends Component{
     constructor(props){
         super(props);
         this.state = store.getState();
-        this.handStoreChange = this.handStoreChange.bind(this);
+        this.handleStoreChange = this.handleStoreChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleBtnClick = this.handleBtnClick.bind(this);
-        store.subscribe(this.handStoreChange);
+        store.subscribe(this.handleStoreChange);
     }
 
     render(){
@@ -36,7 +36,7 @@ class TodoList extends Component{
         )
     }
 
-    handStoreChange(){
+    handleStoreChange(){
         this.setState(store.getState());
     }
 
