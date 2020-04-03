@@ -1,119 +1,31 @@
-import React, { Component, Fragment } from 'react';
-import TodoItem from './TodoItem';
-import axios from 'axios';
-import './style.css';
+import React,{ Component } from 'react';
+import 'antd/dist/antd.css';
+import { Input, Button, List } from 'antd';
 
-class TodoList extends Component {
+const data = [
+    'Racing car sprays burning fuel into crowd.',
+    'Japanese princess to wed commoner.',
+    'Australian walks 100km after outback crash.',
+    'Man charged over missing wedding girl.',
+    'Los Angeles battles huge wildfires.'
+];
 
-    constructor(props) {
-        super(props);
-        // 当组件的state或者props发生改变的时候，render函数就会重新执行
-        this.state = {
-            inputValue:'',
-            list:[]
-        };
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleBtnClick = this.handleBtnClick.bind(this);
-        this.handleItemDelete = this.handleItemDelete.bind(this);
-    }
-
-    // 在组件即将被挂载到页面的时刻自动执行
-    componentWillMount(){
-        console.log('componentWillMount');
-    }
-
-    render() {
-        console.log('parent render');
+class TodoList extends Component{
+    render(){
         return (
-            <Fragment>
+            <div style={{marginTop:'10px',marginLeft:'10px'}}>
                 <div>
-                    <label htmlFor="insertArea">输入内容</label>
-                    <input 
-                        id="insertArea"
-                        className='input'
-                        value={this.state.inputValue} 
-                        onChange={this.handleInputChange}
-                        ref={(input) => {this.input = input}}
-                    />
-                    <button onClick={this.handleBtnClick}>提交</button>
+                    <Input placeholder='todo info'  style={{width:'300px', marginRight:'10px'}} />
+                    <Button type="primary">提交</Button>
                 </div>
-                <ul ref={(ul) => {this.ul = ul}}>
-                    {this.getTodoItem()}
-                </ul>
-            </Fragment>
-        )
-    }
-
-    // 组件被挂载到页面之后，自动被执行
-    // ajax数据获取
-    componentDidMount(){
-        console.log('componentDidMount');
-        axios.get('/api/todolist')
-            .then((res) => {
-                console.log(res.data);
-                this.setState(() => ({
-                    list:[...res.data]
-                }));
-            })
-            .catch(() => {alert('error')})
-    }
-
-    // 组件被更新之前，他会自动被执行
-    shouldComponentUpdate(){
-        console.log('shouldComponentUpdate');
-        return true;
-    }
-
-    // 组件被更新之前，它会自动执行，但是他在shouldComponentUpadte之后
-    // 如果shouldComponentUpdate返回true它才执行
-    // 如果返回false，这个函数就不会执行了
-    componentWillUpdate(){
-        console.log('componentWillUpdate');
-    }
-
-    // 组件更新完成之后，它会被执行
-    componentDidUpdate(){
-        console.log('componentDidUpdate');
-    }
-
-    getTodoItem(){
-        return this.state.list.map((item,index) => {
-            return (
-                <TodoItem 
-                    key={index}
-                    content={item}
-                    index={index}
-                    deleteItem={this.handleItemDelete}
+                <List 
+                    style={{marginTop:'10px',width:'300px'}}
+                    bordered
+                    dataSource={data}
+                    renderItem={item => (<List.Item>{item}</List.Item>)}
                 />
-            )
-        });
-    }
-
-    handleInputChange(e) {
-        // console.log(e.target);
-        // const value = e.target.value;
-        // console.log(this.input);
-        const value = this.input.value;
-        this.setState(() => ({
-            inputValue:value
-        }));
-    }
-
-    handleBtnClick() {
-        this.setState((prevState) => ({
-            list:[...prevState.list,prevState.inputValue],
-            inputValue:''
-        }),() => {
-            console.log(this.ul.querySelectorAll('div').length);
-        });
-    }
-
-    handleItemDelete(index) {
-        this.setState((prevState) => {
-            const list = [...prevState.list];
-            list.splice(index,1);
-            return {list}
-        });
+            </div>
+        )
     }
 }
 
