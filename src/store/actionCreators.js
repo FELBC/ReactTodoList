@@ -1,5 +1,4 @@
-import { CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM, INIT_LIST_ACTION } from './actionTypes';
-import axios from 'axios';
+import { CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM, INIT_LIST_ACTION,GET_INIT_LIST } from './actionTypes';
 
 export const getInputChangeAction = (value) => ({
     type:CHANGE_INPUT_VALUE,
@@ -20,16 +19,6 @@ export const initListAction = (data) => ({
     data
 });
 
-// 为了便于统一管理，
-// 异步数据请求从TodoList生命周期函数componentDidMount里抽离出来
-export const getTodoList = () => {
-    //返回的函数会自动接收到dispatch
-    return (dispatch) => {
-        axios.get('/list').then((res) => {
-            const data = res.data;
-            //异步获取完数据后改变store数据
-            const action = initListAction(data);
-            dispatch(action);
-        })
-    }
-}
+export const getInitList = () => ({
+    type:GET_INIT_LIST
+})

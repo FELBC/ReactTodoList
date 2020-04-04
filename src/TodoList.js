@@ -1,9 +1,8 @@
 import React,{ Component } from 'react';
 import 'antd/dist/antd.css';
 import store from './store';
-import { getInputChangeAction, getAddItemAction, getDeleteItemAction, getTodoList } from './store/actionCreators';
+import { getInputChangeAction, getAddItemAction, getDeleteItemAction, getInitList} from './store/actionCreators';
 import TodoListUI from './TodoListUI';
-
 
 class TodoList extends Component{
 
@@ -30,20 +29,7 @@ class TodoList extends Component{
     }
 
     componentDidMount(){
-        // 一般action只能是js对象，
-        // 用了redux-thunk后即使getTodoList返回的内容不是对象，而是一个函数，
-        // 你也可以通过store.dispatch把这个函数发送给store
-        // store自动帮你执行了action对应的这个函数
-        /*
-            (dispatch) => {
-                axios.get('/list').then((res) => {
-                    const data = res.data;
-                    const action = initListAction(data);
-                    dispatch(action);
-                })
-            }
-        */
-        const action = getTodoList();
+        const action = getInitList();
         store.dispatch(action);
     }
 
