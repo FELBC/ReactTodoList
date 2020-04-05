@@ -1,34 +1,34 @@
-import React,{ Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
-class TodoList extends Component{
-
-    render(){
-        return(
+//无状态组件
+const TodoList = (props) => {
+    const { inputValue, changeInputValue, handleClick, handleItemDelete, list } = props;
+    return(
+        <div>
             <div>
-                <div>
-                    <input 
-                        value={this.props.inputValue} 
-                        onChange={this.props.changeInputValue}
-                    />
-                    <button>提交</button>
-                </div>
-                <ul>
-                    <li>Dell</li>
-                </ul>
+                <input 
+                    value={inputValue} 
+                    onChange={changeInputValue}
+                />
+                <button onClick={handleClick}>提交</button>
             </div>
-        )
-    }
-
-    handleInputChange(e){
-        console.log(e.target.value);
-    }
+            <ul>
+                {
+                    list.map((item,index) => {
+                        return <li onClick={handleItemDelete.bind(this,index)} key={index}>{item}</li>
+                    })
+                }
+            </ul>
+        </div>
+    )
 }
 
 // 把store里面的数据(state)映射给组件，变成组件的props
 const mapStateToProps = (state) => {
     return {
-        inputValue:state.inputValue
+        inputValue:state.inputValue,
+        list:state.list
     }
 }
 
@@ -43,9 +43,27 @@ const mapDispatchToProps = (dispatch) => {
                 value:e.target.value
             };
             dispatch(action);
+        },
+
+        handleClick(){
+            const action = {
+                type:'add_item'
+            };
+            dispatch(action);
+        },
+
+        handleItemDelete(index){
+            const action = {
+                type:'delete_item',
+                index:index
+            };
+            dispatch(action);
         }
+
     }
 }
 
 // 让todoList组件和store做连接
+// TodoList是一个UI组件，connect方法把这个UI组件和业务逻辑相结合，
+// connect返回的内容实际上是一个容器组件
 export default connect(mapStateToProps,mapDispatchToProps)(TodoList);
